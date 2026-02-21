@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bayzon Style Store</title>
+<title>Bayzon Store</title>
 
 <style>
 body{
@@ -11,132 +11,41 @@ body{
   background:#f5f5f5;
 }
 
-/* TOP BAR */
-.topbar{
-  background:#4a4a4a;
-  color:white;
-  padding:8px 20px;
-  font-size:14px;
-  display:flex;
-  justify-content:space-between;
-}
-
 /* HEADER */
 .header{
-  background:white;
+  background:#131921;
+  color:white;
   padding:15px 20px;
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:20px;
 }
 
 .logo{
-  font-size:32px;
+  font-size:28px;
   font-weight:bold;
   color:#ff6a00;
 }
 
-.search{
-  flex:1;
-  display:flex;
-}
-
-.search input{
-  flex:1;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:25px 0 0 25px;
-}
-
-.search button{
-  padding:12px 20px;
-  border:none;
-  background:#ff6a00;
-  color:white;
-  border-radius:0 25px 25px 0;
+.cart-btn{
   cursor:pointer;
-}
-
-.header-right{
-  display:flex;
-  gap:20px;
   font-weight:bold;
-}
-
-/* NAVBAR */
-.navbar{
-  background:white;
-  padding:12px 20px;
-  display:flex;
-  gap:25px;
-  border-top:1px solid #eee;
-}
-
-.navbar a{
-  text-decoration:none;
-  color:#333;
-  font-weight:bold;
-}
-
-/* HERO SECTION */
-.hero{
-  display:grid;
-  grid-template-columns:3fr 1fr;
-  gap:20px;
-  padding:20px;
-}
-
-.banner{
-  position:relative;
-}
-
-.banner img{
-  width:100%;
-  height:350px;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.banner-text{
-  position:absolute;
-  right:40px;
-  top:80px;
-  color:white;
-  font-size:36px;
-  font-weight:bold;
-  background:rgba(0,0,0,0.6);
-  padding:15px;
-}
-
-.side-banners{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-}
-
-.side-banners img{
-  width:100%;
-  height:165px;
-  object-fit:cover;
-  border-radius:10px;
 }
 
 /* PRODUCTS */
-.section{
-  padding:20px;
-}
-
 .products{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:20px;
+  padding:20px;
 }
 
 .product{
   background:white;
   padding:15px;
-  border-radius:10px;
   text-align:center;
+  border-radius:8px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
 .product img{
@@ -145,95 +54,230 @@ body{
   object-fit:cover;
 }
 
-.price{
-  color:#ff6a00;
+button{
+  background:#ff6a00;
+  border:none;
+  color:white;
+  padding:8px 15px;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+/* CART DRAWER */
+.cart{
+  position:fixed;
+  right:-400px;
+  top:0;
+  width:350px;
+  height:100%;
+  background:white;
+  box-shadow:-3px 0 10px rgba(0,0,0,0.2);
+  padding:20px;
+  transition:0.3s;
+  overflow-y:auto;
+}
+
+.cart.active{
+  right:0;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  border-bottom:1px solid #ddd;
+  padding-bottom:5px;
+}
+
+.total{
   font-weight:bold;
+  margin-top:15px;
+}
+
+/* FOOTER */
+.footer{
+  background:#e5e5e5;
+  padding:40px 20px;
+  margin-top:40px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+.footer h3{
+  border-bottom:2px solid #ff6a00;
+  padding-bottom:5px;
+}
+
+.footer p, .footer li{
+  font-size:14px;
+  color:#555;
+}
+
+.footer ul{
+  list-style:none;
+  padding:0;
+}
+
+.newsletter input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:1px solid #ccc;
+}
+
+.newsletter button{
+  margin-top:10px;
+  width:100%;
+}
+
+.copyright{
+  text-align:center;
+  margin-top:30px;
+  font-size:13px;
+  color:#777;
 }
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div>📞 +971 5 26537275 | ✉ info@bayzon.com</div>
-  <div>Fast delivery | Login / Register</div>
-</div>
-
 <!-- HEADER -->
 <div class="header">
   <div class="logo">bayzon</div>
-
-  <div class="search">
-    <input placeholder="What can we help you find?">
-    <button>🔍</button>
-  </div>
-
-  <div class="header-right">
-    🛒 Cart AED 0.00
+  <div class="cart-btn" onclick="toggleCart()">
+    🛒 Cart (<span id="cart-count">0</span>)
   </div>
 </div>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <a href="#">Office Supplies</a>
-  <a href="#">Ink & Toner</a>
-  <a href="#">Household & Cleaning</a>
-  <a href="#">Pantry Supplies</a>
-  <a href="#">Tech & Electronics</a>
-  <a href="#">Equipments</a>
-  <a href="#">Industrial</a>
+<!-- PRODUCTS -->
+<div class="products" id="product-list"></div>
+
+<!-- CART -->
+<div class="cart" id="cart">
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <div class="total">Total: AED <span id="total">0</span></div>
+  <button onclick="toggleCart()">Close</button>
 </div>
 
-<!-- HERO -->
-<div class="hero">
+<!-- FOOTER -->
+<div class="footer">
 
-  <div class="banner">
-    <img src="https://via.placeholder.com/1200x400">
-    <div class="banner-text">
-      LOOKING FOR EVERYDAY<br>OFFICE ESSENTIALS?
-    </div>
-  </div>
+  <div class="footer-grid">
 
-  <div class="side-banners">
-    <img src="https://via.placeholder.com/400x200">
-    <img src="https://via.placeholder.com/400x200">
-  </div>
-
-</div>
-
-<!-- FEATURED PRODUCTS -->
-<div class="section">
-  <h2>Featured Items</h2>
-
-  <div class="products">
-
-    <div class="product">
-      <img src="https://via.placeholder.com/300">
-      <h4>Fire Resistant Safe</h4>
-      <p class="price">AED 299</p>
+    <div>
+      <h3>WHO WE ARE</h3>
+      <p>Bayzon.com aims to provide a complete buying experience to our customers. We believe that every client deserves an effortless shopping experience.</p>
+      <ul>
+        <li>✔ Swift Purchase Process</li>
+        <li>✔ Quick Order Delivery</li>
+        <li>✔ Competitive Prices</li>
+      </ul>
     </div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300">
-      <h4>Digital Locker Safe</h4>
-      <p class="price">AED 499</p>
+    <div>
+      <h3>CUSTOMER SERVICE</h3>
+      <ul>
+        <li>Terms of Use</li>
+        <li>Refunds & Exchange Policy</li>
+        <li>Payment Options</li>
+      </ul>
+      <p>We Accept:</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" width="50">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" width="50">
     </div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300">
-      <h4>Fingerprint Safe</h4>
-      <p class="price">AED 799</p>
+    <div>
+      <h3>COMPANY</h3>
+      <ul>
+        <li>About Us</li>
+        <li>Careers</li>
+        <li>Contact Us</li>
+      </ul>
+      <p>Dubai, UAE<br>+971 526537275<br>info@bayzon.com</p>
     </div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300">
-      <h4>Office Drawer Safe</h4>
-      <p class="price">AED 199</p>
+    <div class="newsletter">
+      <h3>JOIN OUR NEWSLETTER</h3>
+      <p>Subscribe to receive latest offers and updates.</p>
+      <input placeholder="Your Email Address">
+      <button>SUBSCRIBE</button>
     </div>
 
   </div>
+
+  <div class="copyright">
+    © Bayzon 2026. All Rights Reserved.
+  </div>
+
 </div>
+
+<script>
+const products = [
+  {id:1,name:"Fire Resistant Safe",price:299,image:"https://images.unsplash.com/photo-1622560480605-d83c853bc5c3"},
+  {id:2,name:"Digital Locker Safe",price:499,image:"https://images.unsplash.com/photo-1606813907291-d86efa9b94db"},
+  {id:3,name:"Fingerprint Safe",price:799,image:"https://images.unsplash.com/photo-1556745757-8d76bdb6984b"},
+  {id:4,name:"Office Safe Box",price:199,image:"https://images.unsplash.com/photo-1586953208448-b95a79798f07"}
+];
+
+let cart = [];
+
+const list = document.getElementById("product-list");
+
+products.forEach(p=>{
+  list.innerHTML += `
+    <div class="product">
+      <img src="${p.image}">
+      <h4>${p.name}</h4>
+      <p>AED ${p.price}</p>
+      <button onclick="addToCart(${p.id})">Add to Cart</button>
+    </div>
+  `;
+});
+
+function addToCart(id){
+  const item = cart.find(p=>p.id===id);
+  if(item){ item.qty++; }
+  else{ cart.push({id,qty:1}); }
+  updateCart();
+}
+
+function updateCart(){
+  document.getElementById("cart-count").innerText =
+    cart.reduce((a,b)=>a+b.qty,0);
+
+  const container = document.getElementById("cart-items");
+  container.innerHTML="";
+  let total=0;
+
+  cart.forEach(c=>{
+    const product = products.find(p=>p.id===c.id);
+    total += product.price*c.qty;
+
+    container.innerHTML += `
+      <div class="cart-item">
+        <span>${product.name} x${c.qty}</span>
+        <button onclick="removeItem(${c.id})">X</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function removeItem(id){
+  cart = cart.filter(p=>p.id!==id);
+  updateCart();
+}
+
+function toggleCart(){
+  document.getElementById("cart").classList.toggle("active");
+}
+</script>
 
 </body>
 </html>
