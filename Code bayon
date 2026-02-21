@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecureVault - Premium Safes</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:#0f1115;
+  color:white;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 60px;
+  background:#111317;
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:700;
+  color:#00f5c4;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  margin-left:30px;
+  font-weight:400;
+}
+
+.hero{
+  height:90vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  background:linear-gradient(to right,#0f1115,#1a1d23);
+}
+
+.hero h1{
+  font-size:48px;
+  margin-bottom:20px;
+}
+
+.hero p{
+  max-width:600px;
+  opacity:0.8;
+}
+
+.btn{
+  margin-top:30px;
+  padding:15px 35px;
+  background:#00f5c4;
+  color:black;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  border-radius:8px;
+}
+
+.products{
+  padding:80px 60px;
+}
+
+.products h2{
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
+}
+
+.card{
+  background:#1a1d23;
+  padding:20px;
+  border-radius:12px;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+
+.card h3{
+  margin:15px 0;
+}
+
+.price{
+  color:#00f5c4;
+  font-weight:600;
+}
+
+footer{
+  background:#111317;
+  text-align:center;
+  padding:30px;
+  margin-top:60px;
+}
+
+/* Chatbot */
+.chat-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#00f5c4;
+  color:black;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.chat-box{
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  width:300px;
+  background:#1a1d23;
+  border-radius:12px;
+  display:none;
+  flex-direction:column;
+}
+
+.chat-header{
+  background:#00f5c4;
+  color:black;
+  padding:10px;
+  border-top-left-radius:12px;
+  border-top-right-radius:12px;
+}
+
+.chat-body{
+  padding:10px;
+  height:200px;
+  overflow-y:auto;
+}
+
+.chat-input{
+  display:flex;
+}
+
+.chat-input input{
+  flex:1;
+  padding:10px;
+  border:none;
+}
+
+.chat-input button{
+  padding:10px;
+  border:none;
+  background:#00f5c4;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SecureVault</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Advanced Fireproof & Digital Safes</h1>
+  <p>Protect your valuables with premium security technology designed for homes, offices & banks.</p>
+  <button class="btn">Shop Now</button>
+</section>
+
+<section class="products">
+  <h2>Featured Safes</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1581091870622-3fcebbf6a6c0" alt="">
+      <h3>Home Digital Safe</h3>
+      <p class="price">₹12,999</p>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf" alt="">
+      <h3>Fireproof Office Safe</h3>
+      <p class="price">₹28,499</p>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1581093588401-22a6f6e20c88" alt="">
+      <h3>Bank Grade Locker</h3>
+      <p class="price">₹75,000</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 SecureVault. All rights reserved.
+</footer>
+
+<!-- Chatbot -->
+<div class="chat-btn" onclick="toggleChat()">AI</div>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">AI Assistant</div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Ask about safes...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+function toggleChat(){
+  let box = document.getElementById("chatBox");
+  box.style.display = box.style.display === "flex" ? "none" : "flex";
+  box.style.flexDirection="column";
+}
+
+function sendMessage(){
+  let input = document.getElementById("userInput");
+  let chatBody = document.getElementById("chatBody");
+
+  if(input.value.trim() === "") return;
+
+  chatBody.innerHTML += "<p><strong>You:</strong> " + input.value + "</p>";
+  chatBody.innerHTML += "<p><strong>AI:</strong> Our best seller is the Fireproof Office Safe. Would you like details?</p>";
+
+  input.value="";
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+</script>
+
+</body>
+</html>
