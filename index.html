@@ -2,264 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bayzon Security Store</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
+<title>Bayzon Safes Store</title>
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
-
-/* HEADER */
-header{
-background:#111;color:white;padding:12px 20px;
-display:flex;align-items:center;gap:20px;flex-wrap:wrap
-}
-.logo{font-size:22px;font-weight:bold}
-.search{flex:1}
-.search input{
-width:100%;padding:8px;border-radius:6px;border:none
-}
-.cart-btn{
-background:white;color:black;padding:8px 14px;
-border-radius:20px;cursor:pointer;font-weight:bold
-}
-.login-btn{
-background:#ffcc00;color:black;padding:8px 14px;
-border-radius:20px;cursor:pointer;font-weight:bold
-}
-
-/* CATEGORIES */
-.categories{
-display:flex;gap:10px;padding:10px;background:white;
-overflow:auto
-}
-.categories button{
-padding:8px 12px;border:none;background:#eee;
-cursor:pointer;border-radius:6px
-}
-
-/* PRODUCTS */
-.products{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;padding:20px
-}
-.product{
-background:white;padding:12px;border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);text-align:center
-}
-.product img{
-width:100%;height:180px;object-fit:cover;border-radius:8px
-}
-.product button{
-background:black;color:white;border:none;
-padding:8px;width:100%;cursor:pointer;border-radius:6px
-}
-
-/* CART */
-.cart{
-position:fixed;right:-400px;top:0;width:350px;height:100%;
-background:white;box-shadow:-3px 0 10px rgba(0,0,0,.2);
-padding:20px;transition:.3s;overflow:auto;z-index:1000
-}
-.cart.active{right:0}
-.cart-item{
-display:flex;justify-content:space-between;
-border-bottom:1px solid #ddd;margin-bottom:10px
-}
-.total{font-weight:bold;margin-top:10px}
-
-/* CHECKOUT */
-.checkout input, .checkout select{
-width:100%;padding:8px;margin:6px 0
-}
-.checkout button{
-background:green;color:white;padding:10px;
-border:none;width:100%;cursor:pointer
-}
-
-/* LOGIN POPUP */
-.popup{
-position:fixed;top:0;left:0;width:100%;height:100%;
-background:rgba(0,0,0,.6);display:none;
-align-items:center;justify-content:center
-}
-.popup-box{
-background:white;padding:20px;border-radius:10px;width:300px
-}
-
-/* WHATSAPP */
-.whatsapp{
-position:fixed;bottom:20px;right:20px;
-background:#25D366;color:white;padding:12px 16px;
-border-radius:50px;font-weight:bold;text-decoration:none
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;}
+header{background:#111;color:white;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;}
+header h1{margin:0;}
+.cart-btn{cursor:pointer;background:white;color:black;padding:8px 15px;border-radius:20px;font-weight:bold;}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:20px;}
+.product{background:white;padding:15px;border-radius:12px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+.product img{width:100%;height:200px;object-fit:cover;border-radius:10px;}
+.product h3{margin:10px 0 5px;}
+.product button{background:black;color:white;border:none;padding:10px;width:100%;cursor:pointer;border-radius:8px;}
+.cart{position:fixed;right:-400px;top:0;width:350px;height:100%;background:white;box-shadow:-3px 0 10px rgba(0,0,0,0.2);padding:20px;transition:0.3s;overflow-y:auto;}
+.cart.active{right:0;}
+.cart h2{margin-top:0;}
+.cart-item{display:flex;justify-content:space-between;margin-bottom:15px;border-bottom:1px solid #ddd;padding-bottom:10px;}
+.total{font-weight:bold;font-size:18px;margin-top:20px;}
+.close-btn{background:red;color:white;border:none;padding:8px 12px;cursor:pointer;float:right;}
 </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
 <header>
-<div class="logo">Bayzon</div>
-
-<div class="search">
-<input type="text" id="search" placeholder="Search safes...">
-</div>
-
-<div class="login-btn" onclick="openLogin()">Login</div>
-
-<div class="cart-btn" onclick="toggleCart()">
-🛒 Cart (<span id="cart-count">0</span>)
-</div>
+  <h1>Bayzon Safes Store</h1>
+  <div class="cart-btn" onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
 </header>
 
-<!-- CATEGORIES -->
-<div class="categories">
-<button onclick="filter('all')">All</button>
-<button onclick="filter('digital')">Digital Safes</button>
-<button onclick="filter('fire')">Fire Resistant</button>
-<button onclick="filter('fingerprint')">Fingerprint</button>
-</div>
+<div class="products" id="product-list"></div>
 
-<!-- PRODUCTS -->
-<div class="products" id="products"></div>
-
-<!-- CART -->
 <div class="cart" id="cart">
-<h2>Your Cart</h2>
-<div id="cart-items"></div>
-<div class="total">Total ₹<span id="total">0</span></div>
-
-<div class="checkout">
-<h3>Checkout</h3>
-<input placeholder="Full Name">
-<input placeholder="Address">
-<input placeholder="Phone">
-
-<select>
-<option>Cash on Delivery</option>
-<option>Online Payment</option>
-</select>
-
-<button>Place Order</button>
-</div>
-</div>
-
-<!-- LOGIN POPUP -->
-<div class="popup" id="loginPopup">
-<div class="popup-box">
-<h3>Login</h3>
-<input placeholder="Email">
-<input placeholder="Password" type="password">
-<button onclick="closeLogin()">Login</button>
-</div>
-</div>
-
-<!-- WHATSAPP -->
-<a class="whatsapp"
-href="https://wa.me/919999999999" target="_blank">
-WhatsApp Order
-</a>
-
-<script>
-const productsData=[
-{id:1,name:"Eagle Fire Safe",price:8499,cat:"fire",img:"https://via.placeholder.com/300"},
-{id:2,name:"Digital Locker Safe",price:9999,cat:"digital",img:"https://via.placeholder.com/300"},
-{id:3,name:"Fingerprint Safe",price:12999,cat:"fingerprint",img:"https://via.placeholder.com/300"},
-{id:4,name:"Godrej Fire Safe",price:6999,cat:"fire",img:"https://via.placeholder.com/300"},
-{id:5,name:"Yale Digital Safe",price:10999,cat:"digital",img:"https://via.placeholder.com/300"}
-];
-
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-
-function displayProducts(list){
-const box=document.getElementById("products");
-box.innerHTML="";
-list.forEach(p=>{
-box.innerHTML+=`
-<div class="product">
-<img src="${p.img}">
-<h4>${p.name}</h4>
-<p>₹${p.price}</p>
-<button onclick="addToCart(${p.id})">Add to Cart</button>
-</div>`;
-});
-}
-
-displayProducts(productsData);
-
-/* FILTER */
-function filter(cat){
-if(cat==="all") displayProducts(productsData);
-else displayProducts(productsData.filter(p=>p.cat===cat));
-}
-
-/* SEARCH */
-document.getElementById("search").addEventListener("input",e=>{
-const val=e.target.value.toLowerCase();
-displayProducts(productsData.filter(p=>p.name.toLowerCase().includes(val)));
-});
-
-/* CART */
-function addToCart(id){
-const item=cart.find(i=>i.id===id);
-if(item)item.qty++;
-else cart.push({id,qty:1});
-saveCart();
-}
-
-function saveCart(){
-localStorage.setItem("cart",JSON.stringify(cart));
-updateCart();
-}
-
-function updateCart(){
-document.getElementById("cart-count").innerText=
-cart.reduce((a,b)=>a+b.qty,0);
-
-const items=document.getElementById("cart-items");
-items.innerHTML="";
-let total=0;
-
-cart.forEach(c=>{
-const p=productsData.find(x=>x.id===c.id);
-total+=p.price*c.qty;
-
-items.innerHTML+=`
-<div class="cart-item">
-<div>
-<h4>${p.name}</h4>
-<p>₹${p.price} × ${c.qty}</p>
-</div>
-<button onclick="removeItem(${c.id})">❌</button>
-</div>`;
-});
-
-document.getElementById("total").innerText=total;
-}
-
-function removeItem(id){
-cart=cart.filter(i=>i.id!==id);
-saveCart();
-}
-
-function toggleCart(){
-document.getElementById("cart").classList.toggle("active");
-}
-
-/* LOGIN */
-function openLogin(){
-document.getElementById("loginPopup").style.display="flex";
-}
-function closeLogin(){
-document.getElementById("loginPopup").style.display="none";
-}
-
-updateCart();
-</script>
-
-</body>
-</html>  <div class="total">Total: ₹<span id="total">0</span></div>
+  <button class="close-btn" onclick="toggleCart()">X</button>
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <div class="total">Total: ₹<span id="total">0</span></div>
 </div>
 
 <script>
